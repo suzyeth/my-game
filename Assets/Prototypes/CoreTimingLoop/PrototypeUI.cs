@@ -210,9 +210,11 @@ namespace Prototype.CoreTimingLoop
                     if (accent.IsHold)
                     {
                         // Hold note: draw as a wide bar spanning press→release
+                        // Clamp left edge to judgment line so the bar stays visible while holding
                         float normalizedEnd = (accent.ReleaseTimeMs - currentTimeMs) / LookAheadMs;
-                        float anchorXEnd = 0.15f + normalizedEnd * 0.85f;
-                        rt.anchorMin = new Vector2(anchorXStart, 0.15f);
+                        float anchorXEnd = Mathf.Clamp(0.15f + normalizedEnd * 0.85f, 0.15f, 1f);
+                        float clampedStart = Mathf.Max(anchorXStart, 0.15f);
+                        rt.anchorMin = new Vector2(clampedStart, 0.15f);
                         rt.anchorMax = new Vector2(anchorXEnd, 0.85f);
                         rt.sizeDelta = Vector2.zero;
                         rt.offsetMin = Vector2.zero;

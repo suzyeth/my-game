@@ -124,7 +124,17 @@ namespace Prototype.CoreTimingLoop
         public int GetAccentsInRange(float startMs, float endMs, List<AccentJson> buffer)
         {
             buffer.Clear();
+            // Include hold notes that started before startMs but are still active
             int startIdx = BinarySearchFirstGE(startMs);
+            for (int i = startIdx - 1; i >= 0; i--)
+            {
+                var a = _sortedAccents[i];
+                if (a.IsHold && a.ReleaseTimeMs > startMs)
+                    buffer.Add(a);
+                else if (a.timeMs < startMs - 5000f)
+                    break; // No hold note lasts longer than 5s in this prototype
+            }
+            // Normal range query
             for (int i = startIdx; i < _sortedAccents.Length; i++)
             {
                 if (_sortedAccents[i].timeMs > endMs) break;
