@@ -1,0 +1,69 @@
+{
+  "meta": {
+    "title": "Prototype Test - Beethoven 5th Simulated",
+    "composer": "Beethoven (simulated)",
+    "audioFile": "test_audio.ogg",
+    "durationMs": 30000,
+    "bpm": 108,
+    "timeSignature": "2/4",
+    "difficulty": 2,
+    "version": 2
+  },
+  "sections": [
+    {
+      "name": "Opening — Fate Knocking",
+      "startMs": 0,
+      "endMs": 10000,
+      "dynamicLevel": "fortissimo"
+    },
+    {
+      "name": "Quiet Passage — Strings",
+      "startMs": 10000,
+      "endMs": 20000,
+      "dynamicLevel": "piano"
+    },
+    {
+      "name": "Climax — Full Orchestra",
+      "startMs": 20000,
+      "endMs": 30000,
+      "dynamicLevel": "fortissimo"
+    }
+  ],
+  "accents": [
+    { "timeMs": 1200, "intensity": "fortissimo", "windowMs": 220, "type": "orchestral_tutti",  "noteType": "tap",  "holdMs": 0 },
+    { "timeMs": 2000, "intensity": "fortissimo", "windowMs": 220, "type": "orchestral_tutti",  "noteType": "tap",  "holdMs": 0 },
+    { "timeMs": 2800, "intensity": "fortissimo", "windowMs": 220, "type": "orchestral_tutti",  "noteType": "tap",  "holdMs": 0 },
+    { "timeMs": 3600, "intensity": "fortissimo", "windowMs": 300, "type": "brass_sustain",     "noteType": "hold", "holdMs": 600 },
+    { "timeMs": 5000, "intensity": "forte",      "windowMs": 220, "type": "timpani_strike",    "noteType": "tap",  "holdMs": 0 },
+    { "timeMs": 5800, "intensity": "forte",      "windowMs": 220, "type": "timpani_strike",    "noteType": "tap",  "holdMs": 0 },
+    { "timeMs": 6600, "intensity": "forte",      "windowMs": 220, "type": "timpani_strike",    "noteType": "tap",  "holdMs": 0 },
+    { "timeMs": 7400, "intensity": "fortissimo", "windowMs": 300, "type": "brass_sustain",     "noteType": "hold", "holdMs": 700 },
+    { "timeMs": 8800, "intensity": "forte",      "windowMs": 200, "type": "cymbal_crash",      "noteType": "tap",  "holdMs": 0 },
+    { "timeMs": 9500, "intensity": "fortissimo", "windowMs": 200, "type": "orchestral_tutti",  "noteType": "tap",  "holdMs": 0 },
+
+    { "timeMs": 11500, "intensity": "piano",     "windowMs": 350, "type": "strings_legato",    "noteType": "hold", "holdMs": 1200 },
+    { "timeMs": 14000, "intensity": "piano",     "windowMs": 350, "type": "strings_legato",    "noteType": "hold", "holdMs": 1000 },
+    { "timeMs": 16500, "intensity": "mezzo",     "windowMs": 300, "type": "woodwind_swell",    "noteType": "hold", "holdMs": 900 },
+    { "timeMs": 18500, "intensity": "mezzo",     "windowMs": 280, "type": "strings_pizzicato", "noteType": "tap",  "holdMs": 0 },
+    { "timeMs": 19200, "intensity": "piano",     "windowMs": 280, "type": "strings_pizzicato", "noteType": "tap",  "holdMs": 0 },
+
+    { "timeMs": 20500, "intensity": "fortissimo", "windowMs": 200, "type": "orchestral_tutti", "noteType": "tap",  "holdMs": 0 },
+    { "timeMs": 21200, "intensity": "fortissimo", "windowMs": 280, "type": "timpani_roll",     "noteType": "hold", "holdMs": 500 },
+    { "timeMs": 22200, "intensity": "forte",      "windowMs": 200, "type": "cymbal_crash",     "noteType": "tap",  "holdMs": 0 },
+    { "timeMs": 22900, "intensity": "forte",      "windowMs": 200, "type": "brass_staccato",   "noteType": "tap",  "holdMs": 0 },
+    { "timeMs": 23600, "intensity": "fortissimo", "windowMs": 300, "type": "organ_chord",      "noteType": "hold", "holdMs": 800 },
+    { "timeMs": 25000, "intensity": "forte",      "windowMs": 200, "type": "timpani_strike",   "noteType": "tap",  "holdMs": 0 },
+    { "timeMs": 25700, "intensity": "fortissimo", "windowMs": 200, "type": "orchestral_tutti", "noteType": "tap",  "holdMs": 0 },
+    { "timeMs": 26400, "intensity": "fortissimo", "windowMs": 280, "type": "brass_sustain",    "noteType": "hold", "holdMs": 600 },
+    { "timeMs": 27600, "intensity": "forte",      "windowMs": 200, "type": "cymbal_crash",     "noteType": "tap",  "holdMs": 0 },
+    { "timeMs": 28300, "intensity": "fortissimo", "windowMs": 200, "type": "timpani_strike",   "noteType": "tap",  "holdMs": 0 },
+    { "timeMs": 29000, "intensity": "fortissimo", "windowMs": 300, "type": "orchestral_tutti", "noteType": "hold", "holdMs": 500 }
+  ],
+  "quietZones": [
+    {
+      "startMs": 10000,
+      "endMs": 20000,
+      "dangerLevel": "high"
+    }
+  ]
+}
