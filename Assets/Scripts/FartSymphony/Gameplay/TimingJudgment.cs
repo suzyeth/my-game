@@ -160,7 +160,8 @@ namespace FartSymphony.Gameplay
             UpdateStats(tier, score);
 
             var result = new JudgmentResult(tier, deltaMs, absDeltaMs,
-                                            accent, adjustedPressTime, outsideWindow);
+                                            accent, adjustedPressTime, outsideWindow,
+                                            isAutoMiss: false, score: score);
             OnJudgment?.Invoke(result);
 
             Debug.Log($"[TimingJudgment] {tier}  Δ{deltaMs:+0.0;-0.0}ms  score={score}  " +

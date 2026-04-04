@@ -38,6 +38,9 @@ namespace FartSymphony
         /// </summary>
         public readonly bool IsAutoMiss;
 
+        /// <summary>Points awarded for this judgment (0 for auto-miss).</summary>
+        public readonly int Score;
+
         public JudgmentResult(
             JudgmentTier tier,
             float        deltaMs,
@@ -45,7 +48,8 @@ namespace FartSymphony
             AccentData?  accent,
             double       timestamp,
             bool         wasOutsideWindow,
-            bool         isAutoMiss = false)
+            bool         isAutoMiss = false,
+            int          score      = 0)
         {
             Tier             = tier;
             DeltaMs          = deltaMs;
@@ -54,6 +58,7 @@ namespace FartSymphony
             Timestamp        = timestamp;
             WasOutsideWindow = wasOutsideWindow;
             IsAutoMiss       = isAutoMiss;
+            Score            = score;
         }
     }
 }
