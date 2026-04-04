@@ -227,11 +227,133 @@ namespace FartSymphony.Editor
             popupText.color     = Color.white;
             popupText.resizeTextForBestFit = false;
             var popupRect = popupGo.GetComponent<RectTransform>();
-            popupRect.anchorMin       = new Vector2(0.25f, 0.55f);
-            popupRect.anchorMax       = new Vector2(0.75f, 0.75f);
-            popupRect.offsetMin       = Vector2.zero;
-            popupRect.offsetMax       = Vector2.zero;
+            popupRect.anchorMin = new Vector2(0.25f, 0.55f);
+            popupRect.anchorMax = new Vector2(0.75f, 0.72f);
+            popupRect.offsetMin = Vector2.zero;
+            popupRect.offsetMax = Vector2.zero;
             popupGo.SetActive(false);
+
+            // Judgment timing hint (早了 / 晚了)
+            var hintGo   = new GameObject("JudgmentHint");
+            hintGo.transform.SetParent(canvasGo.transform, false);
+            var hintText = hintGo.AddComponent<Text>();
+            hintText.text      = "← 早了";
+            hintText.fontSize  = 28;
+            hintText.alignment = TextAnchor.MiddleCenter;
+            hintText.color     = Color.white;
+            var hintRect = hintGo.GetComponent<RectTransform>();
+            hintRect.anchorMin = new Vector2(0.25f, 0.50f);
+            hintRect.anchorMax = new Vector2(0.75f, 0.57f);
+            hintRect.offsetMin = Vector2.zero;
+            hintRect.offsetMax = Vector2.zero;
+            hintGo.SetActive(false);
+
+            // ── Score / Combo / Time bar (top) ────────────────────────────────
+            // Time (top left)
+            var timeGo   = new GameObject("TimeText");
+            timeGo.transform.SetParent(canvasGo.transform, false);
+            var timeText = timeGo.AddComponent<Text>();
+            timeText.text      = "0:00";
+            timeText.fontSize  = 28;
+            timeText.alignment = TextAnchor.MiddleLeft;
+            timeText.color     = Color.white;
+            var timeRect = timeGo.GetComponent<RectTransform>();
+            timeRect.anchorMin = new Vector2(0.10f, 0.92f);
+            timeRect.anchorMax = new Vector2(0.30f, 1.00f);
+            timeRect.offsetMin = Vector2.zero;
+            timeRect.offsetMax = Vector2.zero;
+
+            // Score (top center)
+            var scoreGo   = new GameObject("ScoreText");
+            scoreGo.transform.SetParent(canvasGo.transform, false);
+            var scoreText = scoreGo.AddComponent<Text>();
+            scoreText.text      = "Score: 0";
+            scoreText.fontSize  = 30;
+            scoreText.fontStyle = FontStyle.Bold;
+            scoreText.alignment = TextAnchor.MiddleCenter;
+            scoreText.color     = Color.white;
+            var scoreRect = scoreGo.GetComponent<RectTransform>();
+            scoreRect.anchorMin = new Vector2(0.35f, 0.92f);
+            scoreRect.anchorMax = new Vector2(0.65f, 1.00f);
+            scoreRect.offsetMin = Vector2.zero;
+            scoreRect.offsetMax = Vector2.zero;
+
+            // Combo (top right-center)
+            var comboGo   = new GameObject("ComboText");
+            comboGo.transform.SetParent(canvasGo.transform, false);
+            var comboText = comboGo.AddComponent<Text>();
+            comboText.text      = "";
+            comboText.fontSize  = 28;
+            comboText.fontStyle = FontStyle.Bold;
+            comboText.alignment = TextAnchor.MiddleRight;
+            comboText.color     = new Color(1f, 0.9f, 0.2f, 1f);
+            var comboRect = comboGo.GetComponent<RectTransform>();
+            comboRect.anchorMin = new Vector2(0.65f, 0.92f);
+            comboRect.anchorMax = new Vector2(0.88f, 1.00f);
+            comboRect.offsetMin = Vector2.zero;
+            comboRect.offsetMax = Vector2.zero;
+
+            // ── Results Panel (hidden) ────────────────────────────────────────
+            var resultsPanelGo = new GameObject("ResultsPanel");
+            resultsPanelGo.transform.SetParent(canvasGo.transform, false);
+            var resultsBg = resultsPanelGo.AddComponent<Image>();
+            resultsBg.color = new Color(0f, 0f, 0f, 0.85f);
+            var resultsPanelRect = resultsPanelGo.GetComponent<RectTransform>();
+            resultsPanelRect.anchorMin = new Vector2(0.25f, 0.20f);
+            resultsPanelRect.anchorMax = new Vector2(0.75f, 0.85f);
+            resultsPanelRect.offsetMin = Vector2.zero;
+            resultsPanelRect.offsetMax = Vector2.zero;
+
+            var resultsTitleGo   = new GameObject("ResultsTitle");
+            resultsTitleGo.transform.SetParent(resultsPanelGo.transform, false);
+            var resultsTitleText = resultsTitleGo.AddComponent<Text>();
+            resultsTitleText.text      = "演出完成！";
+            resultsTitleText.fontSize  = 48;
+            resultsTitleText.fontStyle = FontStyle.Bold;
+            resultsTitleText.alignment = TextAnchor.MiddleCenter;
+            resultsTitleText.color     = Color.yellow;
+            var resultsTitleRect = resultsTitleGo.GetComponent<RectTransform>();
+            resultsTitleRect.anchorMin = new Vector2(0f, 0.72f);
+            resultsTitleRect.anchorMax = new Vector2(1f, 1.00f);
+            resultsTitleRect.offsetMin = Vector2.zero;
+            resultsTitleRect.offsetMax = Vector2.zero;
+
+            var resultsBodyGo   = new GameObject("ResultsBody");
+            resultsBodyGo.transform.SetParent(resultsPanelGo.transform, false);
+            var resultsBodyText = resultsBodyGo.AddComponent<Text>();
+            resultsBodyText.text      = "";
+            resultsBodyText.fontSize  = 26;
+            resultsBodyText.alignment = TextAnchor.MiddleCenter;
+            resultsBodyText.color     = Color.white;
+            var resultsBodyRect = resultsBodyGo.GetComponent<RectTransform>();
+            resultsBodyRect.anchorMin = new Vector2(0.05f, 0f);
+            resultsBodyRect.anchorMax = new Vector2(0.95f, 0.70f);
+            resultsBodyRect.offsetMin = Vector2.zero;
+            resultsBodyRect.offsetMax = Vector2.zero;
+
+            resultsPanelGo.SetActive(false);
+
+            // ── Pause Overlay (hidden) ────────────────────────────────────────
+            var pausePanelGo = new GameObject("PausePanel");
+            pausePanelGo.transform.SetParent(canvasGo.transform, false);
+            var pauseBg = pausePanelGo.AddComponent<Image>();
+            pauseBg.color = new Color(0f, 0f, 0f, 0.65f);
+            FillParent(pausePanelGo.GetComponent<RectTransform>());
+
+            var pauseTextGo   = new GameObject("PauseText");
+            pauseTextGo.transform.SetParent(pausePanelGo.transform, false);
+            var pauseText = pauseTextGo.AddComponent<Text>();
+            pauseText.text      = "PAUSED";
+            pauseText.fontSize  = 48;
+            pauseText.alignment = TextAnchor.MiddleCenter;
+            pauseText.color     = Color.white;
+            var pauseTextRect = pauseTextGo.GetComponent<RectTransform>();
+            pauseTextRect.anchorMin = new Vector2(0.3f, 0.4f);
+            pauseTextRect.anchorMax = new Vector2(0.7f, 0.65f);
+            pauseTextRect.offsetMin = Vector2.zero;
+            pauseTextRect.offsetMax = Vector2.zero;
+
+            pausePanelGo.SetActive(false);
 
             // ── EventSystem ──────────────────────────────────────────────────
             // Project uses New Input System package — use InputSystemUIInputModule,
@@ -271,8 +393,9 @@ namespace FartSymphony.Editor
             sarGo.transform.SetParent(systemsGo.transform);
             var scoreAndRating = sarGo.AddComponent<ScoreAndRating>();
 
-            // VisualCueSystem lives on the Canvas root
+            // VisualCueSystem and GameHUD both live on the Canvas root
             var visualCueSystem = canvasGo.AddComponent<VisualCueSystem>();
+            var gameHUD         = canvasGo.AddComponent<GameHUD>();
 
             var lfmGo = new GameObject("LevelFlowManager");
             var lfm   = lfmGo.AddComponent<LevelFlowManager>();
@@ -303,6 +426,23 @@ namespace FartSymphony.Editor
             lfmSO.FindProperty("_scoreAndRating") .objectReferenceValue = scoreAndRating;
             lfmSO.FindProperty("_visualCueSystem").objectReferenceValue = visualCueSystem;
             lfmSO.ApplyModifiedProperties();
+
+            // ── Wire GameHUD ──────────────────────────────────────────────────
+            var hudSO = new SerializedObject(gameHUD);
+            hudSO.FindProperty("_scoreText")        .objectReferenceValue = scoreText;
+            hudSO.FindProperty("_comboText")        .objectReferenceValue = comboText;
+            hudSO.FindProperty("_timeText")         .objectReferenceValue = timeText;
+            hudSO.FindProperty("_judgmentHintText") .objectReferenceValue = hintText;
+            hudSO.FindProperty("_resultsPanel")     .objectReferenceValue = resultsPanelGo;
+            hudSO.FindProperty("_resultsTitleText") .objectReferenceValue = resultsTitleText;
+            hudSO.FindProperty("_resultsBodyText")  .objectReferenceValue = resultsBodyText;
+            hudSO.FindProperty("_pausePanel")       .objectReferenceValue = pausePanelGo;
+            hudSO.FindProperty("_pauseText")        .objectReferenceValue = pauseText;
+            hudSO.FindProperty("_timingJudgment")   .objectReferenceValue = timingJudgment;
+            hudSO.FindProperty("_scoreAndRating")   .objectReferenceValue = scoreAndRating;
+            hudSO.FindProperty("_audioManager")     .objectReferenceValue = audioManager;
+            hudSO.FindProperty("_levelFlowManager") .objectReferenceValue = lfm;
+            hudSO.ApplyModifiedProperties();
 
             // ── Wire TimingJudgment ───────────────────────────────────────────
             var tjSO = new SerializedObject(timingJudgment);
