@@ -233,18 +233,18 @@ namespace FartSymphony.UI
             _poolTargetTimeMs[slot]  = accent.TimeMs;
             _pool[slot].SetActive(true);
 
-            // Size by intensity
-            float sizeMultiplier = accent.Intensity switch
+            // Width by intensity (thin vertical bar, Sprint 1 style)
+            float noteWidth = accent.Intensity switch
             {
-                "fortissimo" => 1.5f,
-                "forte"      => 1.2f,
-                "mezzo"      => 1.0f,
-                "piano"      => 0.7f,
-                "pianissimo" => 0.5f,
-                _            => 1.0f
+                "fortissimo" => 16f,
+                "forte"      => 13f,
+                "mezzo"      => 10f,
+                "piano"      =>  8f,
+                "pianissimo" =>  6f,
+                _            => 10f
             };
-            float size = _iconBaseSize * sizeMultiplier;
-            _poolRects[slot].sizeDelta = new Vector2(size, size);
+            // Height stretches to fill track height via anchors; only set width
+            _poolRects[slot].sizeDelta = new Vector2(noteWidth, 0f);
 
             // Color by intensity
             Color noteColor = accent.Intensity switch

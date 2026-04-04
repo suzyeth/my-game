@@ -129,12 +129,17 @@ namespace FartSymphony.Editor
             judgeRect.anchoredPosition = Vector2.zero;
 
             // Note prefab (hidden — pool source for VisualCueSystem)
-            var notePrefabGo   = CreateImage(trackGo.transform, "NotePrefab", noteSprite);
+            // Plain white rect, no sprite — VisualCueSystem tints by intensity (Sprint 1 style)
+            var notePrefabGo   = new GameObject("NotePrefab");
+            notePrefabGo.transform.SetParent(trackGo.transform, false);
+            var notePrefabImg  = notePrefabGo.AddComponent<Image>();
+            notePrefabImg.color  = Color.white;
+            notePrefabImg.sprite = null;
             var notePrefabRect = notePrefabGo.GetComponent<RectTransform>();
-            notePrefabRect.anchorMin        = new Vector2(0f, 0.5f);
-            notePrefabRect.anchorMax        = new Vector2(0f, 0.5f);
+            notePrefabRect.anchorMin        = new Vector2(0f, 0.1f);
+            notePrefabRect.anchorMax        = new Vector2(0f, 0.9f);
             notePrefabRect.pivot            = new Vector2(0.5f, 0.5f);
-            notePrefabRect.sizeDelta        = new Vector2(56f, 56f);
+            notePrefabRect.sizeDelta        = new Vector2(10f, 0f);   // thin vertical bar like S1
             notePrefabRect.anchoredPosition = Vector2.zero;
             notePrefabGo.SetActive(false);
 
