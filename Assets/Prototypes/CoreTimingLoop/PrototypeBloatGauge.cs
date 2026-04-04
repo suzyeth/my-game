@@ -36,6 +36,11 @@ namespace Prototype.CoreTimingLoop
 
         public void Deactivate() => _active = false;
 
+        public void ResumeAfterPause()
+        {
+            if (!HasOverflowed) _active = true;
+        }
+
         public void Tick(float deltaTime)
         {
             if (!_active || HasOverflowed) return;
@@ -54,6 +59,9 @@ namespace Prototype.CoreTimingLoop
         public void OnJudgmentReceived(JudgmentResult result)
         {
             if (!_active) return;
+
+            // No press = no fart = no drain
+            if (result.IsAutoMiss) return;
 
             float drain = result.Tier switch
             {

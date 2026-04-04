@@ -35,6 +35,9 @@ namespace Prototype.CoreTimingLoop
         private List<Image> _accentMarkers = new List<Image>();
         private float _judgmentFadeTimer;
         private bool _holdingJudgment; // true while hold note is active — don't fade
+        private Text _countdownText;
+        private Image _pauseOverlay;
+        private Text _pauseText;
         private Canvas _canvas;
 
         private readonly List<AccentJson> _accentBuffer = new List<AccentJson>();
@@ -131,8 +134,37 @@ namespace Prototype.CoreTimingLoop
             _gameOverText = CreateText("GameOver", "", 36, Vector2.zero);
             _gameOverText.rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
             _gameOverText.rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+            _gameOverText.rectTransform.sizeDelta = new Vector2(600, 400);
             _gameOverText.alignment = TextAnchor.MiddleCenter;
             _gameOverText.gameObject.SetActive(false);
+
+            // Countdown (hidden)
+            _countdownText = CreateText("Countdown", "", 96, Vector2.zero);
+            _countdownText.rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
+            _countdownText.rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+            _countdownText.rectTransform.sizeDelta = new Vector2(400, 200);
+            _countdownText.alignment = TextAnchor.MiddleCenter;
+            _countdownText.gameObject.SetActive(false);
+
+            // Pause overlay (hidden)
+            var pauseBgObj = new GameObject("PauseOverlay");
+            pauseBgObj.transform.SetParent(transform, false);
+            _pauseOverlay = pauseBgObj.AddComponent<Image>();
+            _pauseOverlay.color = new Color(0, 0, 0, 0.6f);
+            var pauseRT = _pauseOverlay.rectTransform;
+            pauseRT.anchorMin = Vector2.zero;
+            pauseRT.anchorMax = Vector2.one;
+            pauseRT.offsetMin = Vector2.zero;
+            pauseRT.offsetMax = Vector2.zero;
+
+            _pauseText = CreateText("PauseText", "", 36, Vector2.zero);
+            _pauseText.transform.SetParent(pauseBgObj.transform, false);
+            _pauseText.rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
+            _pauseText.rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+            _pauseText.rectTransform.sizeDelta = new Vector2(500, 300);
+            _pauseText.alignment = TextAnchor.MiddleCenter;
+
+            pauseBgObj.SetActive(false);
         }
 
         public void UpdateState(float currentTimeMs, BeatMapData beatMap,
@@ -315,7 +347,7 @@ namespace Prototype.CoreTimingLoop
                 $"Score: {judge.TotalScore}\n" +
                 $"Perfect: {judge.PerfectCount} | Good: {judge.GoodCount} | Miss: {judge.MissCount}\n" +
                 $"Max Combo: {judge.MaxCombo}\n\n" +
-                $"[按 R 重试]";
+                $"[R] 重试  [ESC] 菜单";
             _gameOverText.color = Color.red;
         }
 
@@ -329,10 +361,51 @@ namespace Prototype.CoreTimingLoop
                 $"Perfect: {judge.PerfectCount} | Good: {judge.GoodCount} | Miss: {judge.MissCount}\n" +
                 $"Max Combo: {judge.MaxCombo}\n" +
                 $"Peak Suspicion: {suspicion.PeakSuspicion:F0}%\n\n" +
-                $"[按 R 重试]";
+                $"[R] 重试  [ESC] 菜单";
             _gameOverText.color = rating == "S" ? Color.yellow :
                                   rating == "A" ? Color.white : Color.gray;
         }
+
+        // --- Countdown ---
+
+        public void ShowCountdown(string text, float timer)
+        {
+            _countdownText.gameObject.SetActive(true);
+            _countdownText.text = text;
+            float scale = text == "GO!" ? 1.2f : 1f + Mathf.PingPong(timer * 2f, 0.15f);
+            _countdownText.transform.localScale = Vector3.one * scale;
+            _countdownText.color = text == "GO!" ? Color.yellow : Color.white;
+        }
+
+        public void HideCountdown()
+        {
+            _countdownText.gameObject.SetActive(false);
+        }
+
+        // --- Pause ---
+
+        public void ShowPause()
+        {
+            _pauseOverlay.gameObject.SetActive(true);
+            _pauseText.text = "PAUSED\n\n[ESC] 继续\n[R] 重新开始";
+            _pauseText.color = Color.white;
+        }
+
+        public void HidePause()
+        {
+            _pauseOverlay.gameObject.SetActive(false);
+        }
+
+        // --- Error ---
+
+        public void ShowError(string error)
+        {
+            _gameOverText.gameObject.SetActive(true);
+            _gameOverText.text = $"加载失败\n\n{error}\n\n[R] 重试";
+            _gameOverText.color = Color.red;
+        }
+
+        // --- Helpers ---
 
         private Text CreateText(string name, string content, int fontSize, Vector2 pos)
         {

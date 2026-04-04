@@ -92,20 +92,23 @@ namespace Prototype.CoreTimingLoop
             AccentJson next = (nextIdx < _sortedAccents.Length && !consumed.Contains(nextIdx))
                 ? _sortedAccents[nextIdx] : null;
 
-            if (prev == null && next == null)
-            {
-                for (int i = 0; i < _sortedAccents.Length; i++)
-                {
-                    if (!consumed.Contains(i)) return _sortedAccents[i];
-                }
-                return null;
-            }
-            if (prev == null) return next;
-            if (next == null) return prev;
+            if (prev == null && next == null) return null;
 
-            float distPrev = timeMs - prev.timeMs;
-            float distNext = next.timeMs - timeMs;
-            return distPrev <= distNext ? prev : next;
+            AccentJson nearest;
+            if (prev == null) nearest = next;
+            else if (next == null) nearest = prev;
+            else
+            {
+                float distPrev = timeMs - prev.timeMs;
+                float distNext = next.timeMs - timeMs;
+                nearest = distPrev <= distNext ? prev : next;
+            }
+
+            // Reject if the nearest accent is outside its own window
+            float distance = Mathf.Abs(timeMs - nearest.timeMs);
+            if (distance > nearest.windowMs / 2f) return null;
+
+            return nearest;
         }
 
         public int IndexOf(AccentJson accent)

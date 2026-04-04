@@ -1,0 +1,75 @@
+{
+  "meta": {
+    "title": "Symphony No. 5 in C Minor — Movement I (Allegro con brio)",
+    "composer": "Ludwig van Beethoven",
+    "audioFile": "beethoven_5_mvt1.ogg",
+    "durationMs": 35000,
+    "bpm": 108,
+    "timeSignature": "2/4",
+    "difficulty": 2,
+    "version": 1
+  },
+  "sections": [
+    {
+      "name": "Fate Motif — Opening Tutti",
+      "startMs": 0,
+      "endMs": 12000,
+      "dynamicLevel": "fortissimo"
+    },
+    {
+      "name": "Second Theme — Strings",
+      "startMs": 12000,
+      "endMs": 22000,
+      "dynamicLevel": "piano"
+    },
+    {
+      "name": "Development — Full Orchestra",
+      "startMs": 22000,
+      "endMs": 35000,
+      "dynamicLevel": "fortissimo"
+    }
+  ],
+  "accents": [
+    { "timeMs": 800,   "intensity": "fortissimo", "windowMs": 220, "type": "orchestral_tutti" },
+    { "timeMs": 1600,  "intensity": "fortissimo", "windowMs": 220, "type": "orchestral_tutti" },
+    { "timeMs": 2400,  "intensity": "fortissimo", "windowMs": 220, "type": "orchestral_tutti" },
+    { "timeMs": 3400,  "intensity": "fortissimo", "windowMs": 280, "type": "brass_sustain"    },
+    { "timeMs": 4800,  "intensity": "forte",      "windowMs": 220, "type": "timpani_strike"   },
+    { "timeMs": 5600,  "intensity": "forte",      "windowMs": 220, "type": "timpani_strike"   },
+    { "timeMs": 6400,  "intensity": "forte",      "windowMs": 220, "type": "timpani_strike"   },
+    { "timeMs": 7400,  "intensity": "fortissimo", "windowMs": 280, "type": "brass_sustain"    },
+    { "timeMs": 8800,  "intensity": "forte",      "windowMs": 200, "type": "cymbal_crash"     },
+    { "timeMs": 9600,  "intensity": "fortissimo", "windowMs": 200, "type": "orchestral_tutti" },
+    { "timeMs": 10400, "intensity": "fortissimo", "windowMs": 220, "type": "orchestral_tutti" },
+    { "timeMs": 11200, "intensity": "fortissimo", "windowMs": 220, "type": "orchestral_tutti" },
+
+    { "timeMs": 13000, "intensity": "piano",  "windowMs": 350, "type": "strings_legato"    },
+    { "timeMs": 15500, "intensity": "piano",  "windowMs": 350, "type": "strings_legato"    },
+    { "timeMs": 17500, "intensity": "mezzo",  "windowMs": 300, "type": "woodwind_swell"    },
+    { "timeMs": 19000, "intensity": "mezzo",  "windowMs": 280, "type": "strings_pizzicato" },
+    { "timeMs": 20000, "intensity": "piano",  "windowMs": 280, "type": "strings_pizzicato" },
+    { "timeMs": 21000, "intensity": "mezzo",  "windowMs": 300, "type": "strings_legato"    },
+
+    { "timeMs": 22500, "intensity": "fortissimo", "windowMs": 200, "type": "orchestral_tutti" },
+    { "timeMs": 23300, "intensity": "fortissimo", "windowMs": 200, "type": "timpani_strike"   },
+    { "timeMs": 24100, "intensity": "forte",      "windowMs": 200, "type": "cymbal_crash"     },
+    { "timeMs": 24900, "intensity": "forte",      "windowMs": 200, "type": "brass_staccato"   },
+    { "timeMs": 25700, "intensity": "fortissimo", "windowMs": 280, "type": "brass_sustain"    },
+    { "timeMs": 27000, "intensity": "forte",      "windowMs": 200, "type": "timpani_strike"   },
+    { "timeMs": 27800, "intensity": "fortissimo", "windowMs": 200, "type": "orchestral_tutti" },
+    { "timeMs": 28600, "intensity": "fortissimo", "windowMs": 200, "type": "orchestral_tutti" },
+    { "timeMs": 29600, "intensity": "fortissimo", "windowMs": 280, "type": "brass_sustain"    },
+    { "timeMs": 31000, "intensity": "forte",      "windowMs": 200, "type": "cymbal_crash"     },
+    { "timeMs": 31800, "intensity": "fortissimo", "windowMs": 200, "type": "timpani_strike"   },
+    { "timeMs": 32600, "intensity": "fortissimo", "windowMs": 200, "type": "orchestral_tutti" },
+    { "timeMs": 33600, "intensity": "fortissimo", "windowMs": 280, "type": "orchestral_tutti" },
+    { "timeMs": 34500, "intensity": "fortissimo", "windowMs": 200, "type": "orchestral_tutti" }
+  ],
+  "quietZones": [
+    {
+      "startMs": 12000,
+      "endMs": 22000,
+      "dangerLevel": "high"
+    }
+  ]
+}

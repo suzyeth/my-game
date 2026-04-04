@@ -20,6 +20,7 @@ namespace Prototype.CoreTimingLoop
         public bool WasOutsideWindow;
         public bool IsHoldStart;  // true = press judgment for hold note
         public bool IsHoldEnd;    // true = release judgment for hold note
+        public bool IsAutoMiss;   // true = player didn't press (no fart released)
     }
 
     public class PrototypeTimingJudge : MonoBehaviour
@@ -74,6 +75,11 @@ namespace Prototype.CoreTimingLoop
         }
 
         public void Deactivate() => _active = false;
+
+        public void ResumeAfterPause()
+        {
+            _active = true;
+        }
 
         public void HandlePress(float dspTimeMs)
         {
@@ -134,17 +140,17 @@ namespace Prototype.CoreTimingLoop
 
             var (releaseTier, releaseScore, outside) = EvaluateTiming(absDelta, halfWindow);
 
-            // Average press + release
-            int avgScore = (_activeHoldPressScore + releaseScore) / 2;
-            JudgmentTier avgTier = (int)_activeHoldPressTier <= (int)releaseTier
-                ? releaseTier : _activeHoldPressTier;
+            // Combine press + release: average score, worst (highest enum) tier
+            int combinedScore = (_activeHoldPressScore + releaseScore) / 2;
+            JudgmentTier worstTier = (int)_activeHoldPressTier >= (int)releaseTier
+                ? _activeHoldPressTier : releaseTier;
 
-            UpdateStats(avgTier, avgScore);
+            UpdateStats(worstTier, combinedScore);
 
             OnJudgment?.Invoke(new JudgmentResult
             {
-                Tier = avgTier, DeltaMs = deltaMs, AbsDeltaMs = absDelta,
-                Accent = _activeHold, Score = avgScore,
+                Tier = worstTier, DeltaMs = deltaMs, AbsDeltaMs = absDelta,
+                Accent = _activeHold, Score = combinedScore,
                 WasOutsideWindow = outside, IsHoldEnd = true
             });
 
@@ -163,7 +169,8 @@ namespace Prototype.CoreTimingLoop
                 {
                     Tier = JudgmentTier.Miss, DeltaMs = _activeHold.windowMs,
                     AbsDeltaMs = _activeHold.windowMs, Accent = _activeHold,
-                    Score = MissScoreMin, WasOutsideWindow = true, IsHoldEnd = true
+                    Score = MissScoreMin, WasOutsideWindow = true, IsHoldEnd = true,
+                    IsAutoMiss = true
                 });
                 _activeHold = null;
             }
@@ -208,14 +215,14 @@ namespace Prototype.CoreTimingLoop
                 if (windowEnd < currentTimeMs)
                 {
                     _consumed.Add(i);
-                    EmitMiss(accent, currentTimeMs, false);
+                    EmitMiss(accent, currentTimeMs, false, isAutoMiss: true);
                 }
             }
 
             CheckHoldTimeout(currentTimeMs);
         }
 
-        private void EmitMiss(AccentJson accent, float timeMs, bool outsideWindow)
+        private void EmitMiss(AccentJson accent, float timeMs, bool outsideWindow, bool isAutoMiss = false)
         {
             UpdateStats(JudgmentTier.Miss, MissScoreMin);
             OnJudgment?.Invoke(new JudgmentResult
@@ -225,7 +232,8 @@ namespace Prototype.CoreTimingLoop
                 AbsDeltaMs = accent != null ? accent.windowMs / 2f : float.MaxValue,
                 Accent = accent,
                 Score = MissScoreMin,
-                WasOutsideWindow = outsideWindow
+                WasOutsideWindow = outsideWindow,
+                IsAutoMiss = isAutoMiss
             });
         }
 

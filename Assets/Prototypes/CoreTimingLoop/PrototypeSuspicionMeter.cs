@@ -11,13 +11,13 @@ namespace Prototype.CoreTimingLoop
     {
         [Header("Suspicion Settings")]
         public float MaxSuspicion = 100f;
-        public float SuspicionDecayRate = 2f;
-        public float QuietZoneMultiplier = 1.5f;
+        public float SuspicionDecayRate = 4f;
+        public float QuietZoneMultiplier = 1.2f;
 
         [Header("Gain Amounts")]
         public float PerfectGain = 0f;
-        public float GoodGain = 5f;
-        public float MissGain = 20f;
+        public float GoodGain = 3f;
+        public float MissGain = 10f;
 
         public float CurrentSuspicion { get; private set; }
         public float NormalizedSuspicion => CurrentSuspicion / MaxSuspicion;
@@ -39,6 +39,11 @@ namespace Prototype.CoreTimingLoop
         }
 
         public void Deactivate() => _active = false;
+
+        public void ResumeAfterPause()
+        {
+            if (!IsSocialDeath) _active = true;
+        }
 
         public void Tick(float deltaTime)
         {
@@ -84,8 +89,8 @@ namespace Prototype.CoreTimingLoop
             PeakSuspicion = MaxSuspicion;
             IsSocialDeath = true;
             _active = false;
-            Debug.Log("[Prototype] Overflow -> Social Death!");
-            OnSocialDeath?.Invoke();
+            // Do NOT fire OnSocialDeath — the caller (GameLoop) handles the game-over reason
+            Debug.Log("[Prototype] Overflow -> Suspicion maxed (handled by LFM as Overflow).");
         }
     }
 }
