@@ -34,20 +34,23 @@ namespace FartSymphony.Editor
         private const string PH_BLOAT_TOP   = "Assets/art/placeholders/bloat_top.png";
 
         [MenuItem("FartSymphony/Build Sprint2Dev Scene")]
-        public static void Build() => BuildInternal(usePlaceholders: false);
+        public static void Build() => BuildInternal();
 
         /// <summary>Called by PlaceholderAssetGenerator after generating placeholder PNGs.</summary>
-        public static void BuildWithPlaceholders() => BuildInternal(usePlaceholders: true);
+        public static void BuildWithPlaceholders() => BuildInternal();
 
-        private static void BuildInternal(bool usePlaceholders)
+        /// <summary>
+        /// Resolves each asset: tries production path first, falls back to placeholder.
+        /// </summary>
+        private static void BuildInternal()
         {
-            string pBg    = usePlaceholders ? PH_BG          : PATH_BG;
-            string pTrack = usePlaceholders ? PH_TRACK       : PATH_TRACK;
-            string pJudge = usePlaceholders ? PH_JUDGE_POINT : PATH_JUDGE_POINT;
-            string pNote  = usePlaceholders ? PH_NOTE        : PATH_NOTE_NORMAL;
-            string pBBg   = usePlaceholders ? PH_BLOAT_BG    : PATH_BLOAT_BG;
-            string pBFill = usePlaceholders ? PH_BLOAT_FILL  : PATH_BLOAT_FILL;
-            string pBTop  = usePlaceholders ? PH_BLOAT_TOP   : PATH_BLOAT_TOP;
+            string pBg    = Pick(PATH_BG,          PH_BG);
+            string pTrack = Pick(PATH_TRACK,        PH_TRACK);
+            string pJudge = Pick(PATH_JUDGE_POINT,  PH_JUDGE_POINT);
+            string pNote  = Pick(PATH_NOTE_NORMAL,  PH_NOTE);
+            string pBBg   = Pick(PATH_BLOAT_BG,     PH_BLOAT_BG);
+            string pBFill = Pick(PATH_BLOAT_FILL,   PH_BLOAT_FILL);
+            string pBTop  = Pick(PATH_BLOAT_TOP,    PH_BLOAT_TOP);
 
             // 1. Ensure Sprite import mode
             SetSprite(pBg); SetSprite(pTrack); SetSprite(pJudge); SetSprite(pNote);
@@ -259,6 +262,19 @@ namespace FartSymphony.Editor
         }
 
         // ── Helpers ───────────────────────────────────────────────────────────
+
+        /// <summary>Returns production path if the file exists on disk, else placeholder.</summary>
+        private static string Pick(string production, string placeholder)
+        {
+            // AssetDatabase path → absolute path
+            string abs = System.IO.Path.Combine(
+                Application.dataPath.Replace("Assets", ""),
+                production.Replace('/', System.IO.Path.DirectorySeparatorChar));
+            bool exists = System.IO.File.Exists(abs);
+            if (!exists)
+                Debug.Log($"[Sprint2SceneBuilder] Using placeholder for: {production}");
+            return exists ? production : placeholder;
+        }
 
         private static void SetSprite(string path)
         {

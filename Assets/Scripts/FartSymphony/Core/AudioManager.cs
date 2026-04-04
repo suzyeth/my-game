@@ -141,6 +141,21 @@ namespace FartSymphony.Core
         // ── Public API ────────────────────────────────────────────────────────
 
         /// <summary>
+        /// Start the game clock without playing audio (no-clip mode).
+        /// Returns the dspTime reference used as trackStartMs.
+        /// </summary>
+        public double StartClockOnly()
+        {
+            double startTime       = AudioSettings.dspTime + 0.1;
+            _trackStartDspTime     = startTime;
+            _trackDurationSec      = 0f;   // no track end detection
+            _playing               = true;
+            _paused                = false;
+            Debug.Log("[AudioManager] StartClockOnly — running without audio.");
+            return startTime;
+        }
+
+        /// <summary>
         /// Schedule the music clip to start playing at the next available dspTime.
         /// Returns the exact dspTime the music will start (use as trackStartMs reference).
         /// </summary>

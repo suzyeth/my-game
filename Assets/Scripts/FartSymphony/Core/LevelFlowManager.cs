@@ -174,9 +174,13 @@ namespace FartSymphony.Core
             if (_audioManager   != null) _audioManager.OnTrackFinished += HandleTrackFinished;
 
             // 4. Schedule audio (returns dspTime of music start)
-            double trackStartDsp = _trackClip != null
-                ? _audioManager.PlayTrack(_trackClip)
-                : AudioSettings.dspTime;
+            double trackStartDsp;
+            if (_trackClip != null)
+                trackStartDsp = _audioManager.PlayTrack(_trackClip);
+            else if (_audioManager != null)
+                trackStartDsp = _audioManager.StartClockOnly();
+            else
+                trackStartDsp = AudioSettings.dspTime + 0.1;
 
             double trackStartMs = trackStartDsp * 1000.0;
 
