@@ -107,60 +107,114 @@ namespace FartSymphony.Editor
             vigImg.color = new Color(0f, 0f, 0f, 0f);
             FillParent(vigGo.GetComponent<RectTransform>());
 
-            // Note Track (horizontal bar across the screen middle)
+            // Note Track (horizontal bar, center of screen)
             var trackGo   = CreateImage(canvasGo.transform, "NoteTrack", trackSprite);
             var trackRect = trackGo.GetComponent<RectTransform>();
-            trackRect.anchorMin       = new Vector2(0f, 0.45f);
-            trackRect.anchorMax       = new Vector2(1f, 0.55f);
-            trackRect.offsetMin       = Vector2.zero;
-            trackRect.offsetMax       = Vector2.zero;
-            var trackImg = trackGo.GetComponent<Image>();
-            trackImg.type = Image.Type.Tiled;
+            trackRect.anchorMin = new Vector2(0f, 0.44f);
+            trackRect.anchorMax = new Vector2(1f, 0.56f);
+            trackRect.offsetMin = Vector2.zero;
+            trackRect.offsetMax = Vector2.zero;
+            trackGo.GetComponent<Image>().type = Image.Type.Tiled;
 
-            // Judgment line indicator (thin vertical bar at 15% from left)
-            var judgeGo   = CreateImage(trackGo.transform, "JudgmentLine", judgePtSprite);
+            // Judgment line — bright yellow solid bar, 12px wide, extends above/below track
+            var judgeGo   = new GameObject("JudgmentLine");
+            judgeGo.transform.SetParent(trackGo.transform, false);
+            var judgeImg  = judgeGo.AddComponent<Image>();
+            judgeImg.color = new Color(1f, 0.92f, 0.1f, 1f);   // bright yellow
             var judgeRect = judgeGo.GetComponent<RectTransform>();
-            judgeRect.anchorMin       = new Vector2(0.15f, 0f);
-            judgeRect.anchorMax       = new Vector2(0.15f, 1f);
-            judgeRect.pivot           = new Vector2(0.5f, 0.5f);
-            judgeRect.sizeDelta       = new Vector2(6f, 0f);
-            judgeRect.anchoredPosition= Vector2.zero;
-            var judgeImg = judgeGo.GetComponent<Image>();
-            if (judgePtSprite == null) judgeImg.color = new Color(1f, 0.85f, 0f, 0.9f);
+            judgeRect.anchorMin        = new Vector2(0.15f, -0.5f);
+            judgeRect.anchorMax        = new Vector2(0.15f,  1.5f);
+            judgeRect.pivot            = new Vector2(0.5f,   0.5f);
+            judgeRect.sizeDelta        = new Vector2(12f,    0f);
+            judgeRect.anchoredPosition = Vector2.zero;
 
-            // Note prefab (hidden — used as pool source by VisualCueSystem)
+            // Note prefab (hidden — pool source for VisualCueSystem)
             var notePrefabGo   = CreateImage(trackGo.transform, "NotePrefab", noteSprite);
             var notePrefabRect = notePrefabGo.GetComponent<RectTransform>();
-            notePrefabRect.anchorMin       = new Vector2(0f, 0.5f);
-            notePrefabRect.anchorMax       = new Vector2(0f, 0.5f);
-            notePrefabRect.pivot           = new Vector2(0.5f, 0.5f);
-            notePrefabRect.sizeDelta       = new Vector2(48f, 48f);
-            notePrefabRect.anchoredPosition= Vector2.zero;
+            notePrefabRect.anchorMin        = new Vector2(0f, 0.5f);
+            notePrefabRect.anchorMax        = new Vector2(0f, 0.5f);
+            notePrefabRect.pivot            = new Vector2(0.5f, 0.5f);
+            notePrefabRect.sizeDelta        = new Vector2(56f, 56f);
+            notePrefabRect.anchoredPosition = Vector2.zero;
             notePrefabGo.SetActive(false);
 
             // ── Bloat Gauge (right side, vertical fill) ──────────────────────
+            // Container: right 7% of screen, 80% height
             var bloatContGo   = new GameObject("BloatGaugeContainer");
             bloatContGo.transform.SetParent(canvasGo.transform, false);
             var bloatContRect = bloatContGo.AddComponent<RectTransform>();
-            bloatContRect.anchorMin       = new Vector2(0.90f, 0.10f);
-            bloatContRect.anchorMax       = new Vector2(0.97f, 0.90f);
-            bloatContRect.offsetMin       = Vector2.zero;
-            bloatContRect.offsetMax       = Vector2.zero;
+            bloatContRect.anchorMin = new Vector2(0.91f, 0.10f);
+            bloatContRect.anchorMax = new Vector2(0.98f, 0.90f);
+            bloatContRect.offsetMin = Vector2.zero;
+            bloatContRect.offsetMax = Vector2.zero;
 
-            var bloatBgGo  = CreateImage(bloatContGo.transform, "BloatBackground", bloatBgSprite);
+            // Background frame
+            var bloatBgGo = CreateImage(bloatContGo.transform, "BloatBackground", bloatBgSprite);
             FillParent(bloatBgGo.GetComponent<RectTransform>());
 
+            // Fill (grows upward, tinted green→red by code)
             var bloatFillGo  = CreateImage(bloatContGo.transform, "BloatFill", bloatFillSprite);
             var bloatFillImg = bloatFillGo.GetComponent<Image>();
-            bloatFillImg.type        = Image.Type.Filled;
-            bloatFillImg.fillMethod  = Image.FillMethod.Vertical;
-            bloatFillImg.fillOrigin  = (int)Image.OriginVertical.Bottom;
-            bloatFillImg.fillAmount  = 0f;
-            bloatFillImg.color       = new Color(0.2f, 0.8f, 0.2f, 1f);
-            FillParent(bloatFillGo.GetComponent<RectTransform>());
+            bloatFillImg.type       = Image.Type.Filled;
+            bloatFillImg.fillMethod = Image.FillMethod.Vertical;
+            bloatFillImg.fillOrigin = (int)Image.OriginVertical.Bottom;
+            bloatFillImg.fillAmount = 0.3f;   // visible test value
+            bloatFillImg.color      = new Color(0.2f, 0.8f, 0.2f, 1f);
+            var bloatFillRect = bloatFillGo.GetComponent<RectTransform>();
+            bloatFillRect.anchorMin = Vector2.zero;
+            bloatFillRect.anchorMax = Vector2.one;
+            bloatFillRect.offsetMin = new Vector2(4f,  4f);
+            bloatFillRect.offsetMax = new Vector2(-4f, -4f);
 
-            var bloatTopGo = CreateImage(bloatContGo.transform, "BloatTop", bloatTopSprite);
-            FillParent(bloatTopGo.GetComponent<RectTransform>());
+            // Top cap — anchored to TOP of container, fixed height
+            var bloatTopGo   = CreateImage(bloatContGo.transform, "BloatTop", bloatTopSprite);
+            var bloatTopRect = bloatTopGo.GetComponent<RectTransform>();
+            bloatTopRect.anchorMin = new Vector2(0f, 1f);
+            bloatTopRect.anchorMax = new Vector2(1f, 1f);
+            bloatTopRect.pivot     = new Vector2(0.5f, 1f);
+            bloatTopRect.sizeDelta = new Vector2(0f, 20f);
+
+            // ── Suspicion Meter (left side, vertical fill) ───────────────────
+            var suspContGo   = new GameObject("SuspicionMeterContainer");
+            suspContGo.transform.SetParent(canvasGo.transform, false);
+            var suspContRect = suspContGo.AddComponent<RectTransform>();
+            suspContRect.anchorMin = new Vector2(0.02f, 0.10f);
+            suspContRect.anchorMax = new Vector2(0.09f, 0.90f);
+            suspContRect.offsetMin = Vector2.zero;
+            suspContRect.offsetMax = Vector2.zero;
+
+            // Background (dark bordered rect using placeholder)
+            var suspBgGo = CreateImage(suspContGo.transform, "SuspicionBackground", null);
+            suspBgGo.GetComponent<Image>().color = new Color(0.05f, 0.05f, 0.1f, 0.85f);
+            FillParent(suspBgGo.GetComponent<RectTransform>());
+
+            // Label text at top
+            var suspLabelGo   = new GameObject("SuspicionLabel");
+            suspLabelGo.transform.SetParent(suspContGo.transform, false);
+            var suspLabel     = suspLabelGo.AddComponent<Text>();
+            suspLabel.text      = "Suspicion";
+            suspLabel.fontSize  = 18;
+            suspLabel.alignment = TextAnchor.UpperCenter;
+            suspLabel.color     = new Color(0.9f, 0.7f, 0.3f, 1f);
+            var suspLabelRect  = suspLabelGo.GetComponent<RectTransform>();
+            suspLabelRect.anchorMin = new Vector2(0f, 0.88f);
+            suspLabelRect.anchorMax = new Vector2(1f, 1f);
+            suspLabelRect.offsetMin = Vector2.zero;
+            suspLabelRect.offsetMax = Vector2.zero;
+
+            // Fill bar
+            var suspFillGo   = CreateImage(suspContGo.transform, "SuspicionFill", null);
+            var suspFillImg  = suspFillGo.GetComponent<Image>();
+            suspFillImg.color      = new Color(0.2f, 0.7f, 1f, 1f);
+            suspFillImg.type       = Image.Type.Filled;
+            suspFillImg.fillMethod = Image.FillMethod.Vertical;
+            suspFillImg.fillOrigin = (int)Image.OriginVertical.Bottom;
+            suspFillImg.fillAmount = 0f;
+            var suspFillRect = suspFillGo.GetComponent<RectTransform>();
+            suspFillRect.anchorMin = new Vector2(0f, 0f);
+            suspFillRect.anchorMax = new Vector2(1f, 0.87f);
+            suspFillRect.offsetMin = new Vector2(4f, 4f);
+            suspFillRect.offsetMax = new Vector2(-4f, 0f);
 
             // ── Judgment Popup Text ───────────────────────────────────────────
             var popupGo   = new GameObject("PopupText");
@@ -228,8 +282,9 @@ namespace FartSymphony.Editor
             vcsSO.FindProperty("_trackRect")     .objectReferenceValue = trackRect;
             vcsSO.FindProperty("_notePrefab")    .objectReferenceValue = notePrefabGo;
             vcsSO.FindProperty("_popupText")     .objectReferenceValue = popupText;
-            vcsSO.FindProperty("_bloatFillImage").objectReferenceValue = bloatFillImg;
-            vcsSO.FindProperty("_vignetteImage") .objectReferenceValue = vigImg;
+            vcsSO.FindProperty("_bloatFillImage")     .objectReferenceValue = bloatFillImg;
+            vcsSO.FindProperty("_suspicionFillImage") .objectReferenceValue = suspFillImg;
+            vcsSO.FindProperty("_vignetteImage")      .objectReferenceValue = vigImg;
             vcsSO.FindProperty("_timingJudgment").objectReferenceValue = timingJudgment;
             vcsSO.FindProperty("_bloatGauge")    .objectReferenceValue = bloatGauge;
             vcsSO.FindProperty("_suspicionMeter").objectReferenceValue = suspicionMeter;

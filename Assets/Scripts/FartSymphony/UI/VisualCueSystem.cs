@@ -63,6 +63,15 @@ namespace FartSymphony.UI
         private static readonly Color _bloatColorDanger  = new Color(1.0f, 0.4f, 0.0f);
         private static readonly Color _bloatColorCritical= new Color(0.9f, 0.1f, 0.1f);
 
+        // ── Inspector — Suspicion Bar ─────────────────────────────────────────
+        [Header("Suspicion Bar UI")]
+        [Tooltip("Image used as the suspicion fill bar. Set Image.Type = Filled.")]
+        [SerializeField] private Image _suspicionFillImage;
+
+        private static readonly Color _suspicionColorLow    = new Color(0.2f, 0.7f, 1.0f);
+        private static readonly Color _suspicionColorMid    = new Color(1.0f, 0.6f, 0.0f);
+        private static readonly Color _suspicionColorHigh   = new Color(0.9f, 0.1f, 0.1f);
+
         // ── Inspector — Suspicion Vignette ────────────────────────────────────
         [Header("Suspicion Vignette")]
         [Tooltip("Full-screen overlay Image. Set alpha via color.a. " +
@@ -156,6 +165,7 @@ namespace FartSymphony.UI
             ScrollNotes(currentMs);
             SpawnNotes(currentMs);
             UpdateBloatGauge();
+            UpdateSuspicionBar();
             UpdateVignette();
         }
 
@@ -313,6 +323,19 @@ namespace FartSymphony.UI
         }
 
         // ── Suspicion vignette ────────────────────────────────────────────────
+
+        private void UpdateSuspicionBar()
+        {
+            if (_suspicionFillImage == null || _suspicionMeter == null) return;
+
+            float ratio = _suspicionMeter.GetSuspicionRatio();
+            _suspicionFillImage.fillAmount = ratio;
+
+            Color c;
+            if      (ratio < 0.5f)  c = Color.Lerp(_suspicionColorLow,  _suspicionColorMid,  ratio / 0.5f);
+            else                    c = Color.Lerp(_suspicionColorMid,   _suspicionColorHigh, (ratio - 0.5f) / 0.5f);
+            _suspicionFillImage.color = c;
+        }
 
         private void UpdateVignette()
         {
