@@ -161,9 +161,11 @@ namespace FartSymphony.Editor
             popupGo.SetActive(false);
 
             // ── EventSystem ──────────────────────────────────────────────────
+            // Project uses New Input System package — use InputSystemUIInputModule,
+            // not the legacy StandaloneInputModule.
             var evtGo = new GameObject("EventSystem");
             evtGo.AddComponent<UnityEngine.EventSystems.EventSystem>();
-            evtGo.AddComponent<UnityEngine.EventSystems.StandaloneInputModule>();
+            evtGo.AddComponent<UnityEngine.InputSystem.UI.InputSystemUIInputModule>();
 
             // ── Game Systems ─────────────────────────────────────────────────
             var systemsGo = new GameObject("GameSystems");

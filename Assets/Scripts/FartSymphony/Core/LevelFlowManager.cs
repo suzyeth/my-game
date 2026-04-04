@@ -28,8 +28,8 @@ namespace FartSymphony.Core
 
         // ── Inspector — level config ──────────────────────────────────────────
         [Header("Level Config")]
-        [Tooltip("Path under StreamingAssets/BeatMaps/ (no extension).")]
-        [SerializeField] private string _beatMapFileName = "beethoven_5_mvt1";
+        [Tooltip("File name inside StreamingAssets/BeatMaps/ (include .json extension).")]
+        [SerializeField] private string _beatMapFileName = "beethoven_5_mvt1.json";
 
         [Tooltip("The symphony AudioClip to play.")]
         [SerializeField] private AudioClip _trackClip;
